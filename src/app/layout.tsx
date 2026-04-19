@@ -20,6 +20,7 @@ const DESCRIPTION =
 const NAME = "Md Shakerullah Sourov";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: TITLE,
   description: DESCRIPTION,
 
