@@ -1,23 +1,35 @@
-import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
+import { createRateLimiter } from "@/lib/createRateLimiter";
+import { headers } from "next/headers";
 
-import { RateLimiterRedis } from "rate-limiter-flexible";
-import { redis } from "./redis";
+export class RateLimitError extends Error {
+  statusCode = 429;
 
-let rateLimiter: Ratelimit | RateLimiterRedis;
-
-if (process.env.REDIS_PROVIDER === "upstash") {
-  rateLimiter = new Ratelimit({
-    redis: Redis.fromEnv(),
-    limiter: Ratelimit.fixedWindow(20, "1 h"),
-  });
-} else {
-  rateLimiter = new RateLimiterRedis({
-    storeClient: redis,
-    keyPrefix: "middleware",
-    points: 10,
-    duration: 60,
-  });
+  constructor() {
+    super("Rate limit exceeded");
+  }
 }
 
-export { rateLimiter };
+export async function applyRateLimit(
+  keyPrefix: string,
+  points: number,
+  duration: number,
+) {
+  const headersList = await headers();
+
+  const ip =
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headersList.get("x-real-ip") ||
+    "unknown";
+
+  const key = `${keyPrefix}:${ip}`;
+
+  const limiter = createRateLimiter(points, duration);
+
+  const result = await limiter.check(key);
+
+  if (!result.success) {
+    throw new RateLimitError();
+  }
+
+  return result;
+}

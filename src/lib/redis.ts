@@ -10,20 +10,47 @@ const upstash = isUpstash
     })
   : null;
 
-const ioredis = !isUpstash ? new Redis({ host: "redis", port: 6379 }) : null;
+export const ioredis = !isUpstash
+  ? new Redis({ host: "redis", port: 6379 })
+  : null;
 
 export const redis = {
-  async get<T>(key: string): Promise<T | null> {
-    if (upstash) return await upstash.get<T>(key);
-    const data = await ioredis!.get(key);
-    return data ? JSON.parse(data) : null;
+  async get<T>(key: string): Promise<T | null | void> {
+    try {
+      if (upstash) return await upstash.get<T>(key);
+      const data = await ioredis!.get(key);
+      return data ? JSON.parse(data) : null;
+    } catch (error) {
+      console.error("Redis GET error:", error);
+    }
   },
 
-  async set(key: string, value: any, exSeconds: number = 300) {
-    const stringValue = JSON.stringify(value);
-    if (upstash) {
-      return await upstash.set(key, stringValue, { ex: exSeconds });
+  async set<T>(
+    key: string,
+    value: T,
+    exSeconds: number = 300,
+  ): Promise<T | "OK" | null | void> {
+    try {
+      if (upstash) {
+        return await upstash.set(key, value, { ex: exSeconds });
+      }
+
+      const stringValue = JSON.stringify(value);
+      return await ioredis!.set(key, stringValue, "EX", exSeconds);
+    } catch (error) {
+      console.error("Redis SET error:", error);
     }
-    return await ioredis!.set(key, stringValue, "EX", exSeconds);
+  },
+
+  async del(key: string): Promise<number | void> {
+    try {
+      if (upstash) return await upstash.del(key);
+
+      if (!ioredis) throw new Error("Redis not initialized");
+
+      return await ioredis.del(key);
+    } catch (error) {
+      console.error("Redis DEL error:", error);
+    }
   },
 };
