@@ -47,6 +47,8 @@ export default function Page() {
         {user?.image ? (
           <Image
             src={user.image}
+            width={64}
+            height={64}
             alt="Avatar"
             className="w-16 h-16 rounded-full border-2 border-border"
           />
