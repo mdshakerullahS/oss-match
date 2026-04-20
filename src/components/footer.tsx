@@ -41,7 +41,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="https://github.com/mdshakerullahS/OSS_Match"
+                  href="https://github.com/mdshakerullahS/oss-match"
                   target="_blank"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
                 >
