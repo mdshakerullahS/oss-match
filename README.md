@@ -1,120 +1,112 @@
-# OSS Match 🚀
+# 🚀 OSS Match | Open-Source Discovery Platform
 
-**OSS Match** is a GitHub API–powered platform that matches developers with relevant open-source issues based on their interests and skills. It’s built with a modern full-stack setup focused on performance, scalability, and developer experience.
+**OSS Match** is a high-performance system designed to connect developers with impactful open-source opportunities. By orchestrating the GitHub REST API with advanced caching and rate-limiting layers, it provides a seamless discovery experience tailored to a developer's specific skill set.
 
----
-
-## ✨ Features
-
-- 🔐 **Authentication**
-  - Secure authentication using **NextAuth**
-  - OAuth login with **GitHub**
-
-- 🧠 **Smart Issue Matching**
-  - Fetches and filters GitHub issues using the GitHub API
-  - Helps developers discover meaningful open-source contributions
-
-- 🎛️ **Advanced Filtering**
-  - Filter issues by labels (e.g. `good first issue`, `help wanted`) & languages (e.g. `TypeScript`, `Python`)
-  - Keyword search for precise issue discovery
-
-- 🗄️ **Database**
-  - **PostgreSQL** for reliable data storage
-  - **Prisma ORM** for type-safe and efficient database access
-
-- ⚡ **Caching & Rate Limiting**
-  - **Upstash Redis** for caching GitHub API responses
-  - **Upstash Rate Limiting** to prevent abuse and stay within API limits (For unauthenticated users)
-
-- 📝 **Form Handling**
-  - Robust and accessible form handling with **React Hook Form**
-
-- 🚀 **Performance-Focused**
-  - Reduced API calls via caching
-  - Optimized queries with Prisma
-  - Secure and scalable architecture
+This project focuses on the "Deploy" and "Scale" pillars of real-world software—utilizing **Docker**, **Redis**, and **type-safe database architecture**.
 
 ---
 
-## 🛠️ Tech Stack
+## 🏗 System Architecture & Performance
 
-- **Language:** TypeScript
-- **Framework:** Next.js
-- **Auth:** NextAuth.js (GitHub OAuth)
-- **Database:** PostgreSQL
-- **ORM:** Prisma
-- **Caching:** Upstash Redis
-- **Rate Limiting:** Upstash Rate Limiting
-- **Forms:** React Hook Form
-- **API:** GitHub REST API
-- **Containerization:** Docker
+- **API Orchestration:** Deep integration with the **GitHub REST API** to fetch, aggregate, and filter real-time issue data.
+- **Latency Optimization:** Implemented **Upstash Redis** as a caching layer to reduce redundant API calls and drastically improve response times.
+- **Traffic Management:** Integrated **Upstash Rate Limiting** to protect system resources and ensure fair usage for unauthenticated users.
+- **Containerized Workflow:** Fully architected with **Docker** for consistent environment parity between development and production.
 
 ---
 
-## 📦 Installation
+## ✨ Key Features
+
+- 🔐 **Secure OAuth Flow:** GitHub-native authentication powered by **NextAuth.js**.
+- 🧠 **Intelligent Matching:** Advanced discovery logic filtering by labels (e.g., `good first issue`) and technical stacks.
+- ⚡ **Type-Safe Data Layer:** Robust schema management using **Prisma ORM** and **PostgreSQL**.
+- 📝 **Validated Interfaces:** Accessible, schema-validated forms built with **React Hook Form** and **Zod**.
+
+---
+
+## 🧰 Tech Stack
+
+| Layer              | Technologies                                   |
+| :----------------- | :--------------------------------------------- |
+| **Framework**      | Next.js (TypeScript), React                    |
+| **Auth**           | NextAuth.js (GitHub OAuth)                     |
+| **Database**       | PostgreSQL, Prisma ORM                         |
+| **Performance**    | Upstash Redis (Caching), Upstash Rate Limiting |
+| **Infrastructure** | Docker, Docker Compose                         |
+| **API**            | GitHub REST API                                |
+
+---
+
+## ▶️ Getting Started
+
+### 🐳 The Docker Way (Recommended)
+
+This system is container-ready. Ensure Docker is running, then execute:
 
 ```bash
-git clone https://github.com/mdshakerullahS/OSS_Match.git
-cd OSS_Match
-npm install # If running without Docker
-```
-
----
-
-## 🔐 Environment Variables
-
-Create a .env file and add:
-
-```bash
-# With Docker
-GITHUB_ID=
-GITHUB_SECRET=
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET=
-
-GITHUB_ACCESS_TOKEN=
-
-POSTGRES_USER=
-POSTGRES_PASSWORD=
-POSTGRES_DB=
-DATABASE_URL=
-
-REDIS_URL=
-
-# Without Docker
-GITHUB_ID=
-GITHUB_SECRET=
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET=
-
-GITHUB_ACCESS_TOKEN=
-
-DATABASE_URL=
-
-UPSTASH_REDIS_REST_URL=
-UPSTASH_REDIS_REST_TOKEN=
-```
-
----
-
-## ▶️ Running the Project
-
-```bash
-#With Docker
 docker compose up --build -d
 docker compose exec app npx prisma migrate dev
+```
 
-# Without Docker
+## 🛠 Manual Local Setup
+
+### 1. Clone & Install:
+
+```bash
+git clone [https://github.com/mdshakerullahS/OSS_Match.git](https://github.com/mdshakerullahS/OSS_Match.git)
+cd OSS_Match
+npm install
+```
+
+### 2. Database Migration:
+
+```bash
 npx prisma migrate dev
+```
+
+### 3. Run Development Server:
+
+```bash
 npm run dev
 ```
 
-App will be available at:
-http://localhost:3000
+App will be available at: http://localhost:3000
 
 ---
 
-## 📸 Screenshot
+## 🔐 Environment Configuration
+
+Create a `.env` file in the root directory and add the following variables:
+
+```bash
+# GitHub Authentication
+GITHUB_ID=
+GITHUB_SECRET=
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET=
+
+# Database Configuration (Local/Cloud)
+DATABASE_URL=
+
+# Database Configuration (Docker)
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_HOST=
+POSTGRES_PORT=5432 # Default port
+POSTGRES_DB=
+
+# Redis Configuration (Upstash)
+REDIS_PROVIDER="upstash"
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+# Redis Configuration (Docker)
+REDIS_URL=
+```
+
+---
+
+## 📸 Preview
 
 ![Preview](Screenshot.png)
 
@@ -141,5 +133,3 @@ See the `LICENSE` file for full details.
 If you like this project, please give it a ⭐ on GitHub!
 
 Happy Coding 🚀
-
----
