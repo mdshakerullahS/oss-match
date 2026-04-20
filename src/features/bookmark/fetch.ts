@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { useBookmarkStore } from "./store";
 
 export const getBookmarks = async () => {
-  const { setIsLoading, setBookmarks, setError } = useBookmarkStore();
+  const { setIsLoading, setBookmarks, setError } = useBookmarkStore.getState();
   try {
     setIsLoading(true);
     const res = await fetch("/api/bookmarks");
@@ -12,8 +12,8 @@ export const getBookmarks = async () => {
     }
     setBookmarks(data.bookmarks);
     setError(null);
-  } catch (err: any) {
-    const message = err.message || "Something went wrong";
+  } catch {
+    const message = "Something went wrong";
     setError(message);
     toast.error(message);
   } finally {
@@ -22,7 +22,8 @@ export const getBookmarks = async () => {
 };
 
 export const deleteBookmark = async (id: number) => {
-  const { setIsDeleting, setBookmarks, bookmarks } = useBookmarkStore();
+  const { setIsDeleting, setBookmarks, bookmarks } =
+    useBookmarkStore.getState();
   try {
     setIsDeleting(true);
     const res = await fetch(`/api/bookmarks/${id}`, {

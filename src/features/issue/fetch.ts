@@ -12,7 +12,7 @@ export const getIssues = async (paramsString: string, currentPage: number) => {
     setHasMore,
     setIsSearched,
     setError,
-  } = useIssueStore();
+  } = useIssueStore.getState();
   try {
     if (currentPage === 1) {
       setIsLoading(true);
@@ -37,8 +37,8 @@ export const getIssues = async (paramsString: string, currentPage: number) => {
     setError(null);
 
     return true;
-  } catch (err: any) {
-    const message = err.message || "Something went wrong";
+  } catch {
+    const message = "Something went wrong";
     setError(message);
     toast.error(message);
     return false;

@@ -2,7 +2,7 @@ import { useRecommendationStore } from "./store";
 
 export const getRecommendations = async () => {
   const { setRecommendations, setError, setIsLoading } =
-    useRecommendationStore();
+    useRecommendationStore.getState();
   try {
     setIsLoading(true);
     const res = await fetch("/api/recommendations");
