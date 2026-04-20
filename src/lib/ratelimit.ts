@@ -1,4 +1,4 @@
-import { createRateLimiter } from "@/lib/createRateLimiter";
+import { createRateLimiter } from "./createRateLimiter";
 import { headers } from "next/headers";
 
 export class RateLimitError extends Error {
