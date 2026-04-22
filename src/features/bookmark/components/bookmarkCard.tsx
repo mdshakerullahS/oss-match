@@ -1,7 +1,5 @@
 "use client";
 
-import { deleteBookmark } from "@/features/bookmark/fetch";
-import { useBookmarkStore } from "@/features/bookmark/store";
 import { BookmarkItem } from "@/types/bookmark";
 import {
   MessageSquare,
@@ -14,10 +12,13 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useBookmarkStore } from "../store";
+import toast from "react-hot-toast";
 
 export default function BookmarkCard({ bookmark }: { bookmark: BookmarkItem }) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const { setBookmarks, bookmarks } = useBookmarkStore.getState();
 
   const formattedDate = new Date(bookmark.created_at).toLocaleDateString(
     undefined,
@@ -27,6 +28,26 @@ export default function BookmarkCard({ bookmark }: { bookmark: BookmarkItem }) {
       year: "numeric",
     },
   );
+
+  const deleteBookmark = async (id: number) => {
+    try {
+      setIsDeleting(true);
+      const res = await fetch(`/api/bookmarks/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        toast.success("Bookmark removed");
+      } else {
+        toast.error("Failed to remove bookmark");
+      }
+      setBookmarks(bookmarks.filter((b) => b.id !== id));
+    } catch {
+      toast.error("Connection error");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault();
