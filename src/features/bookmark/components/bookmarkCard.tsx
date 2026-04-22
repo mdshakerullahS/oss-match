@@ -16,7 +16,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function BookmarkCard({ bookmark }: { bookmark: BookmarkItem }) {
-  const { isDeleting } = useBookmarkStore();
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const formattedDate = new Date(bookmark.created_at).toLocaleDateString(

@@ -10,11 +10,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { useBookmarkStore } from "@/features/bookmark/store";
 import { GitHubIssue } from "@/types/issue";
+import { useState } from "react";
 
 export default function IssueCard({ issue }: { issue: GitHubIssue }) {
-  const { isBookmarking, setIsBookmarking } = useBookmarkStore();
+  const [isBookmarking, setIsBookmarking] = useState<boolean>(false);
 
   const formattedDate = new Date(issue.created_at).toLocaleDateString(
     undefined,
